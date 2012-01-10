@@ -16,9 +16,9 @@
                   data (-> data
                            (encode)
                            (merge (select-keys doc [:_id :_rev])))]
-              (cond (not doc) (c/create-document data session-key)
+              (cond (not doc) (c/put-document data session-key)
                     (or (= data {}) (= data doc)) doc
-                    :else (c/update-document data))))))
+                    :else (c/put-document data))))))
   
   (delete-session [_ session-key]
     (c/with-db db
@@ -34,7 +34,4 @@
   "Example usage:"
   (def example-store
     (couch-store
-     (c/get-database {:name  "sessions"
-                      :language "clojure"
-                      :username "uname"
-                      :password "password"}))))
+     (c/get-database (assoc (com.ashafa.clutch.utils/url "sessions") :username "username" :password "password")))))
