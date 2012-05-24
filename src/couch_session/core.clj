@@ -4,7 +4,7 @@
         ring.middleware.session.store)
   (:require [com.ashafa.clutch :as c]))
 
-(defn clutch-hack
+(defn get-clutch
   "Workaround for clutch, which returns a id-less document with database status
    when you do (get-document nil)."
   [key]
@@ -13,12 +13,12 @@
 (deftype CouchStore [db]
   SessionStore
   (read-session [_ session-key]
-    (-> (c/with-db db (clutch-hack session-key))
+    (-> (c/with-db db (get-clutch session-key))
         (decode)))
 
   (write-session [_ session-key data]
     (c/with-db db
-      (:_id (let [doc (clutch-hack session-key)
+      (:_id (let [doc (get-clutch session-key)
                   data (-> data
                            (encode)
                            (merge (select-keys doc [:_id :_rev])))]
@@ -28,7 +28,7 @@
   
   (delete-session [_ session-key]
     (c/with-db db
-      (when-let [doc (clutch-hack session-key)]
+      (when-let [doc (get-clutch session-key)]
         (c/delete-document doc)))
     nil))
 
