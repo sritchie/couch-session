@@ -8,7 +8,8 @@
   "Workaround for clutch, which returns a id-less document with database status
    when you do (get-document nil)."
   [key]
-  (if (empty? key) nil (c/get-document key)))
+  (when-not (empty? key)
+    (c/get-document key)))
 
 (deftype CouchStore [db]
   SessionStore
@@ -40,4 +41,6 @@
   "Example usage:"
   (def example-store
     (couch-store
-     (c/get-database (assoc (com.ashafa.clutch.utils/url "sessions") :username "username" :password "password")))))
+     (c/get-database (assoc (com.ashafa.clutch.utils/url "sessions")
+                       :username "username"
+                       :password "password")))))

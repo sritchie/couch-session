@@ -10,7 +10,7 @@ Installation
 Add:
 
 ```clojure
-[couch-session "1.1.0"]
+[couch-session "1.1.1"]
 ```
 
 to dependencies in your `project.clj`.
@@ -24,11 +24,12 @@ Usage
 (ns hello
   (:use [couch-session.core :only (couch-store)]
         [com.ashafa.clutch :only (get-database)])
+
  (def store
-  (get-database {:name  "sessions"
-                 :language "clojure"
-                 :username "user"
-                 :password "pass"}))
+  (get-database (assoc (com.ashafa.clutch.utils/url "sessions")
+                      :username "username"
+                      :password "password")))
+
 (def app
   (-> ...
       ... other middleware ...
