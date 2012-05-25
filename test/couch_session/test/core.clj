@@ -14,9 +14,11 @@
 
 
 (defn server-fixture [f]
+  (clutch/delete-database test-db)
   (clutch/create-database test-db)
   (f)
   (clutch/delete-database test-db))
+  
 
 
 (use-fixtures :each server-fixture)
