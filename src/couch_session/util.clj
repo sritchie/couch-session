@@ -15,7 +15,7 @@
 (defmethod encode-key :default [k] k)
 
 (defmethod encode-key :keyword [k]
-  (-> k name encode-key))
+  (-> k name encode-key keyword))
 
 (defmethod encode-key :string [k]
   (keyword
@@ -25,11 +25,10 @@
 
 (defmulti decode-key key-type)
 
-(defmethod decode-key :default [k]
-  (replace-first k "UNDERSCORE" "_"))
+(defmethod decode-key :default [k] k)
 
 (defmethod decode-key :keyword [k]
-  (-> k name decode-key))
+  (-> k name decode-key keyword))
 
 (defmethod decode-key :string [k]
   (if-not (.startsWith k UNDERSCORE)

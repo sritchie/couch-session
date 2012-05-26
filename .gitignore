@@ -2,6 +2,7 @@ NOTES
 CHILD
 CHILDMAKER
 NANNY
+.lein-deps-sum
 _deps
 build
 target
