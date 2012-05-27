@@ -37,6 +37,10 @@ Usage
       ....))
 ```
 
+Testing
+=====
+To run the tests, create a database called `couch-session-test` on localhost, and a user `couch-session-tester` with password `couch-session-password` which has admin privileges to create and delete databases.
+
 License
 =======
 

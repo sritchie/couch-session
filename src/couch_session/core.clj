@@ -11,11 +11,14 @@
   (when-not (empty? key)
     (c/get-document key)))
 
+
+
 (deftype CouchStore [db]
   SessionStore
   (read-session [_ session-key]
-    (-> (c/with-db db (get-clutch session-key))
-        (decode)))
+    (or (-> (c/with-db db (get-clutch session-key))
+            (decode))
+        {}))
 
   (write-session [_ session-key data]
     (c/with-db db
@@ -23,9 +26,10 @@
                   data (-> data
                            (encode)
                            (merge (select-keys doc [:_id :_rev])))]
-              (cond (not doc) (c/put-document data :id session-key)
+              (cond (not doc) (c/put-document (dissoc data :_id :_rev)
+                                              :id session-key)
                     (or (= data {}) (= data doc)) doc
-                    :else (c/put-document data))))))
+                    :else (c/update-document data))))))
   
   (delete-session [_ session-key]
     (c/with-db db
